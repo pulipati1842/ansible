@@ -1,0 +1,40 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: install apache2, git, wget, tree
+    apt:
+      name: 
+        - git
+        - wget
+        - tree
+        - apache2
+      state: present
+      #with_items: ['git', 'wget','tree','apache2']
+    when: ansible_os_family == 'Debian'
+    
+
+  - name: start the service
+    service:
+       name: apache2
+       state: restarted
+    when: ansible_os_family == 'Debian'
+
+
+  - name: install httpd, git, wget, tree
+    yum:
+        name: 
+          - git
+          - wget
+          - tree
+          - httpd
+        state: present
+        #with_items: ['git', 'wget','tree','httpd']
+    when: ansible_os_family == 'RedHat'
+
+  - name: start the service
+    service:
+        name: httpd
+        state: restarted
+    when: ansible_os_family == 'RedHat'
+
